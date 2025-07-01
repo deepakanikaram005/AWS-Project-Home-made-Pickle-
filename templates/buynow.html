@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Place Your Order - Amma Pickles</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('/static/mainimgs.jpg') no-repeat center center/cover;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.95);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    li {
+      padding: 12px;
+      border-bottom: 1px solid #ccc;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .total {
+      text-align: right;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+      background-color: #218838;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .progress-stage {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .stage-label {
+      font-size: 0.9rem;
+      font-weight: bold;
+      width: 80px;
+      text-align: center;
+      color: #333;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      height: 20px;
+      background-color: #eee;
+      border-radius: 10px;
+      margin: 0 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: #28a745;
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .delivery-date {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .back-home {
+      display: block;
+      width: fit-content;
+      margin: 30px auto 0;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      padding: 10px 25px;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .back-home:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="order-container">
+  <h1>Complete Your Order</h1>
+  <ul id="order-list"></ul>
+  <div class="total" id="total-amount"></div>
+
+  <form id="order-form">
+    <label for="name">Name</label>
+    <input id="name" required>
+
+    <label for="address">Address</label>
+    <textarea id="address" rows="3" required></textarea>
+
+    <label for="phone">Phone</label>
+    <input id="phone" pattern="\d{10}" required>
+
+    <div class="error" id="error-msg"></div>
+
+    <button type="submit" class="submit-btn">Place Order</button>
+  </form>
+</div>
+
+<div class="container" id="tracking-container" style="display:none;">
+  <h2>Order Tracking</h2>
+
+  <div class="progress-stage">
+    <div class="stage-label">
+      <img class="icon" src="https://cdn-icons-png.flaticon.com/512/2554/2554978.png" alt="Shipping"><br>Shipping
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="stage-label">
+      <span style="font-size:24px;">📦</span><br>Delivered
+    </div>
+  </div>
+
+  <div class="delivery-date" id="delivery-date"></div>
+
+  <a href="{{ url_for('shop') }}" class="back-home">Back to Shop</a>
+</div>
+
+<script>
+  const orderData = JSON.parse(localStorage.getItem("orderSummary")) || [];
+  const orderList = document.getElementById("order-list");
+  const totalAmount = document.getElementById("total-amount");
+  const form = document.getElementById("order-form");
+  const errorMsg = document.getElementById("error-msg");
+  const orderContainer = document.getElementById("order-container");
+  const trackingContainer = document.getElementById("tracking-container");
+  const progressBar = document.getElementById("progress-bar");
+  const deliveryDateEl = document.getElementById("delivery-date");
+
+  if (orderData.length === 0) {
+    orderContainer.innerHTML = '<p>No items found in order. <a href="{{ url_for("shop") }}">Go to Shop</a></p>';
+  } else {
+    let total = 0;
+    orderData.forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span>${item.name}</span><span>₹${item.price}</span>`;
+      orderList.appendChild(li);
+      total += parseFloat(item.price);
+    });
+    totalAmount.textContent = `Total: ₹${total.toFixed(2)}`;
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!form.name.value.trim() || !form.address.value.trim() || !/^\d{10}$/.test(form.phone.value)) {
+      errorMsg.textContent = "Please fill all fields correctly.";
+      return;
+    }
+
+    orderContainer.style.display = "none";
+    trackingContainer.style.display = "block";
+
+    const now = new Date();
+    const deliveryDate = new Date(now);
+    deliveryDate.setDate(now.getDate() + 5);
+    deliveryDateEl.textContent = `Estimated Delivery: ${deliveryDate.toDateString()}`;
+
+    localStorage.removeItem("orderSummary");
+
+    // Simulate 5-day progress bar
+    const startTime = Date.now();
+    const duration = 5 * 24 * 60 * 60 * 1000; // 5 days in ms
+
+    function animateProgress() {
+      const elapsed = Date.now() - startTime;
+      const percent = Math.min(100, (elapsed / duration) * 100);
+      progressBar.style.width = percent + "%";
+      if (percent < 100) requestAnimationFrame(animateProgress);
+    }
+
+    animateProgress();
+  });
+</script>
+</body>
+</html>
+

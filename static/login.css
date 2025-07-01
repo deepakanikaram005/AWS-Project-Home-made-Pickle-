@@ -1,0 +1,90 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.background {
+  background: url('/static/homeimg1.jpg') no-repeat center center/cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: brightness(0.6);
+}
+
+header {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffeb99;
+}
+
+.tagline {
+  font-size: 1rem;
+  color: #ffdcdc;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav form {
+  display: inline;
+}
+
+button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ff7f50;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #e55b2b;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: calc(100vh - 80px);
+}
+
+.welcome-text {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  border-radius: 15px;
+}
+
+.welcome-text h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: #fffacd;
+}
+
+.welcome-text p {
+  font-size: 1.5rem;
+  color: #ffc0cb;
+}

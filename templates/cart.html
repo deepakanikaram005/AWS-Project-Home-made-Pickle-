@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart - Amma Pickles</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('/static/mainimgs.jpg') no-repeat center center/cover;
+      background-attachment: fixed;
+      background-blend-mode: overlay;
+      background-color: rgba(0, 128, 0, 0.1);
+      color: #fff;
+      padding-top: 100px;
+      margin: 0;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+    }
+
+    .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffeb99;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a, .nav-button {
+      text-decoration: none;
+    }
+
+    .nav-button {
+      padding: 0.5rem 1.2rem;
+      background-color: #2e8b57;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .nav-button:hover {
+      background-color: #5de04f;
+    }
+
+    .cart-container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fffacd;
+      margin-bottom: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      color: #333;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .cart-item span {
+      font-weight: bold;
+    }
+
+    .remove-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-left: 10px;
+    }
+
+    .remove-btn:hover {
+      background-color: #c82333;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #ffcccc;
+      font-size: 1.2rem;
+    }
+
+    .buy-btn {
+      display: inline-block;
+      margin: 10px auto;
+      text-align: center;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .buy-btn:hover {
+      background-color: #218838;
+    }
+
+    .orders-popup {
+      position: fixed;
+      top: 100px;
+      right: -400px;
+      width: 350px;
+      height: 100%;
+      background-color: #fff;
+      color: #333;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.4);
+      padding: 20px;
+      transition: right 0.4s ease-in-out;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .orders-popup.open {
+      right: 0;
+    }
+
+    .orders-popup h2 {
+      text-align: center;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+
+    .order-entry {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+
+    .order-entry strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .order-items {
+      margin-left: 10px;
+      margin-bottom: 8px;
+    }
+
+    .close-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .close-btn:hover {
+      background-color: #c82333;
+    }
+
+    .delete-order-btn {
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .delete-order-btn:hover {
+      background-color: #e33e2f;
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 2000;
+    }
+
+    .popup.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Amma Pickles and Snacks</div>
+  <nav>
+    <a href="{{ url_for('index') }}"><button class="nav-button">Home</button></a>
+    <a href="{{ url_for('shop') }}"><button class="nav-button">Shop</button></a>
+    <button class="nav-button" onclick="toggleOrders()">My Orders</button>
+  </nav>
+</header>
+
+<div class="cart-container">
+  <h1>Your Cart</h1>
+  <div id="cart-items"></div>
+  <div id="empty-message" class="empty-message" style="display:none;">Your cart is empty.</div>
+  <div style="text-align:center;">
+    <button class="buy-btn" onclick="buyNow()">Buy Now</button>
+  </div>
+</div>
+
+<!-- Orders Sidebar Popup -->
+<div class="orders-popup" id="ordersPopup">
+  <button class="close-btn" onclick="toggleOrders()">X</button>
+  <h2>My Orders</h2>
+  <div id="orders-list"></div>
+</div>
+
+<!-- Success Popup -->
+<div id="popup" class="popup">Order cancelled successfully.</div>
+
+<script>
+  let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+  const container = document.getElementById('cart-items');
+  const empty = document.getElementById('empty-message');
+  const ordersPopup = document.getElementById('ordersPopup');
+  const ordersList = document.getElementById('orders-list');
+
+  function renderCart() {
+    container.innerHTML = '';
+    if (cartData.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    cartData.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <span>${item.name}</span>
+        <div>
+          <span>₹${item.price}</span>
+          <button class="remove-btn" onclick="removeItem(${i})">Remove</button>
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function removeItem(i) {
+    cartData.splice(i, 1);
+    localStorage.setItem('cart', JSON.stringify(cartData));
+    renderCart();
+  }
+
+  function buyNow() {
+    if (cartData.length === 0) return alert('Your cart is empty!');
+    const orderItems = cartData.map(item => ({
+      name: item.name,
+      price: item.price
+    }));
+    const deliveryDate = getFutureDate(5);
+    let orderHistory = JSON.parse(localStorage.getItem('orders')) || [];
+    orderHistory.push({
+      id: Date.now(),
+      items: orderItems,
+      orderedOn: new Date().toLocaleDateString(),
+      deliveryDate: deliveryDate
+    });
+    localStorage.setItem('orders', JSON.stringify(orderHistory));
+    localStorage.setItem('orderSummary', JSON.stringify(cartData));
+    localStorage.removeItem('cart');
+    window.location.href = '/buynow';
+  }
+
+  function getFutureDate(daysAhead) {
+    const date = new Date();
+    date.setDate(date.getDate() + daysAhead);
+    return date.toDateString();
+  }
+
+  function toggleOrders() {
+    ordersPopup.classList.toggle('open');
+    if (ordersPopup.classList.contains('open')) {
+      renderOrders();
+    }
+  }
+
+  function renderOrders() {
+    const orderHistory = JSON.parse(localStorage.getItem('orders')) || [];
+    ordersList.innerHTML = '';
+    if (orderHistory.length === 0) {
+      ordersList.innerHTML = '<p>No orders yet.</p>';
+      return;
+    }
+
+    orderHistory.slice().reverse().forEach((order, index) => {
+      const div = document.createElement('div');
+      div.className = 'order-entry';
+      div.innerHTML = `
+        <strong>Ordered on:</strong> ${order.orderedOn}
+        <div class="order-items">
+          ${order.items.map(i => `<div>• ${i.name} - ₹${i.price}</div>`).join('')}
+        </div>
+        <strong>Delivery by:</strong> ${order.deliveryDate}
+        <button class="delete-order-btn" onclick="deleteOrder(${order.id})">Cancel Order</button>
+      `;
+      ordersList.appendChild(div);
+    });
+  }
+
+  function deleteOrder(id) {
+    let orderHistory = JSON.parse(localStorage.getItem('orders')) || [];
+    orderHistory = orderHistory.filter(order => order.id !== id);
+    localStorage.setItem('orders', JSON.stringify(orderHistory));
+    showPopup("Order cancelled successfully.");
+    renderOrders();
+  }
+
+  function showPopup(message) {
+    const popup = document.getElementById('popup');
+    popup.textContent = message;
+    popup.classList.add('show');
+    setTimeout(() => popup.classList.remove('show'), 3000);
+  }
+
+  renderCart();
+</script>
+
+</body>
+</html>
+

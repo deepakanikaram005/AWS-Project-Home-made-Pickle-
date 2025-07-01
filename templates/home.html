@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amma Pickles and Snacks</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fffaf0;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background-color:#333;/* rgba(0, 0, 0, 0.6);*/
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      flex-wrap: wrap;
+    }
+
+    .site-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .site-title h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffeb99;
+    }
+
+    .site-title span {
+      font-size: 14px;
+      font-style: italic;
+      color: #f0f0f0;
+    }
+
+    .navbar {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .navbar li a:hover {
+      text-decoration: underline;
+    }
+
+    .section {
+      padding: 60px 40px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    #home {
+      background: url("static/circle.jpg") no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      min-height: 40vh;
+    }
+
+    #home .content {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 10px;
+      max-width: 600px;
+    }
+
+    #shop,
+    #about,
+    #contact {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    #shop {
+      background-color: #fff8e1;
+    }
+
+    #about {
+      background-color: #f0fff0;
+    }
+
+    #contact {
+      background-color: #f9f9f9;
+    }
+
+    .text-section {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .text-section h1 {
+      font-size: 2.5rem;
+      color: #2e8b57;
+      margin-bottom: 15px;
+    }
+
+    .text-section p {
+      font-size: 1.2rem;
+      color: #444;
+    }
+
+    .circle-img {
+      flex: 1;
+      max-width: 350px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .circle-img img {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Feedback Styling */
+    .feedback-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .feedback-toggle {
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .feedback-box {
+      display: none;
+      margin-top: 10px;
+      background-color: white;
+      border: 2px solid #2e8b57;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .feedback-box textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      resize: none;
+    }
+
+    .feedback-box button.submit {
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .feedback-box button.submit:hover {
+      background-color: #246b45;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      #shop,
+      #about,
+      #contact {
+        flex-direction: column;
+      }
+      .text-section {
+        text-align: center;
+      }
+      .circle-img {
+        margin-top: 20px;
+      }
+      .circle-img img {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="site-title">
+      <h1>Amma Pickles and Snacks</h1>
+      <span>Taste the Best</span>
+    </div>
+    <ul class="navbar">
+      <!--<li><a href="#home">Home</a></li>
+      <li><a href="#shop">Shop</a></li>-->
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('shop') }}">Shop</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </header>
+
+  <!-- Home Section -->
+  <section id="home" class="section">
+    <div class="content">
+      <!--<h1>Welcome ☺</h1>-->
+      <h1>Welcome <img src="https://em-content.zobj.net/source/microsoft-teams/337/smiling-face_263a-fe0f.png" alt="Smiling Face" style="width: 30px; vertical-align: middle;" /></h1>
+
+      <p>Enjoy homemade pickles crafted with tradition and love!</p>
+    </div>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="shop" class="section">
+    <div class="text-section">
+      <!--<h1>Shop Our Pickles</h1>-->
+      <h1>Shop 
+  <img src="https://em-content.zobj.net/source/microsoft-teams/337/shopping-bags_1f6cd-fe0f.png" 
+       alt="Shop Icon" 
+       style="width: 30px; vertical-align: middle;" />
+</h1>
+      <p>Browse our delicious selection of traditional homemade pickles and snacks.</p>
+    </div>
+    <div class="circle-img">
+      <img src="static/pic1.jpg" alt="Pickle Showcase" />
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <div class="circle-img">
+      <!--<img src="static/pic1.jpg" alt="About Image" />-->
+      <img src="{{ url_for('static', filename='circle.jpg') }}" alt="Pickle" width="300" />
+
+    </div>
+    <div class="text-section">
+      <!--<h1>About Us</h1>-->
+      <h1>About Us 
+  <img src="https://em-content.zobj.net/source/microsoft-teams/337/busts-in-silhouette_1f465.png" 
+       alt="About Us Icon" 
+       style="width: 30px; vertical-align: middle;" />
+</h1>
+
+      <p>We are a family-run business delivering authentic and organic pickles to your doorstep.</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="text-section">
+      <!--<h1>Contact Us</h1>-->
+      <h1>Contact Us 
+  <img src="https://em-content.zobj.net/source/microsoft-teams/337/telephone-receiver_1f4de.png" 
+       alt="Contact Icon" 
+       style="width: 30px; vertical-align: middle;" />
+</h1>
+
+      <p>Email: contact@pickledelight.com<br />Phone: +91-1234567890</p>
+    </div>
+    <div class="circle-img">
+      <div>
+        <!--<img src="static/pic1.jpg" alt="Contact Image" />-->
+        <img src="{{ url_for('static', filename='pic.jpg') }}" alt="Pickle" width="300" />
+
+        <div class="feedback-container">
+          <button class="feedback-toggle" onclick="toggleFeedback()">Feedback</button>
+          <div class="feedback-box" id="feedbackForm">
+            <textarea placeholder="Your feedback here..."></textarea>
+            <button class="submit">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feedback Toggle Script -->
+  <script>
+    function toggleFeedback() {
+      const box = document.getElementById('feedbackForm');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+
+</body>
+</html>

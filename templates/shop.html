@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Shop - Amma Pickles and Snacks</title>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('/static/circle.jpg') no-repeat center center/cover;
+      background-attachment: fixed;
+      color: #fff;
+      background-color: rgba(0,128,0,0.1);
+      background-blend-mode: overlay;
+      padding-top: 72px; /* reserve space for sticky header */
+    }
+    /* Header */
+    header {
+      background: rgba(0,0,0,0.8);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+    .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffeb99;
+      user-select: none;
+    }
+    .tagline {
+      font-size: 1rem;
+      color: #ffdcdc;
+      margin-left: 8px;
+      user-select: none;
+    }
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+    nav a button {
+      padding: 0.5rem 1.2rem;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    nav a button:hover {
+      background-color: #5de04f;
+    }
+    /* Sections */
+    section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-size: 2.5rem;
+      color: #fffacd;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    /* Menu Section */
+    #menu {
+      background-color: rgba(0,0,0,0.4);
+      border-radius: 12px;
+      padding: 40px 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    .menu-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .menu-card {
+      background: #fff;
+      color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      width: 280px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      user-select: none;
+    }
+    .menu-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+      color: #2e8b57;
+    }
+    .menu-card ul {
+      list-style: none;
+    }
+    .menu-card ul li {
+      margin: 8px 0;
+    }
+    .menu-card a {
+      color: #006400;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .menu-card a:hover {
+      text-decoration: underline;
+    }
+    /* Product Cards */
+    .items-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .item-card {
+      width: 280px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      color: #333;
+      transition: transform 0.3s;
+      user-select: none;
+    }
+    .item-card:hover {
+      transform: scale(1.03);
+    }
+    .item-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .item-info {
+      padding: 15px;
+    }
+    .item-info h4 {
+      margin-bottom: 10px;
+      color: #d2691e;
+      font-size: 1.2rem;
+    }
+    .item-info p {
+      margin-bottom: 15px;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .add-to-cart {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .add-to-cart:hover {
+      background-color: #218838;
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .item-card, .menu-card {
+        width: 90%;
+      }
+      h2 {
+        font-size: 2rem;
+      }
+      header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 1rem;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; align-items:center;">
+    <div class="brand">Amma Pickles and Snacks</div>
+    <div class="tagline">Taste the Best</div>
+  </div>
+  <nav>
+    <a href="{{ url_for('home') }}"><button>Home</button></a>
+    <a href="#menu"><button>Menu</button></a>
+    <!--<a href="#veg-section"><button>Veg Pickles</button></a>
+    <a href="#nonveg-section"><button>Non‑Veg Pickles</button></a>
+    <a href="#snacks-section"><button>Snacks</button></a>-->
+    <a href="{{ url_for('cart') }}"><button>Cart</button></a>
+  </nav>
+</header>
+
+<section id="menu">
+  <h2>Our Menu</h2>
+  <div class="menu-container">
+    <div class="menu-card">
+      <h3><a href="#veg-section">Veg Pickles</a></h3>
+      <ul>
+        <li><a href="#veg-section">Mango Pickle</a></li>
+        <li><a href="#veg-section">Lemon Pickle</a></li>
+        <li><a href="#veg-section">Gongura Pickle</a></li>
+        <li><a href="#veg-section">Gooseberry Pickle</a></li>
+        <li><a href="#veg-section">Tomato Pickle</a></li>
+      </ul>
+    </div>
+    <div class="menu-card">
+      <h3><a href="#nonveg-section">Non‑Veg Pickles</a></h3>
+      <ul>
+        <li><a href="#nonveg-section">Chicken Pickle</a></li>
+        <li><a href="#nonveg-section">Mutton Pickle</a></li>
+        <li><a href="#nonveg-section">Prawns Pickle</a></li>
+        <li><a href="#nonveg-section">Fish Pickle</a></li>
+      </ul>
+    </div>
+    <div class="menu-card">
+      <h3><a href="#snacks-section">Snacks</a></h3>
+      <ul>
+        <li><a href="#snacks-section">Murukulu</a></li>
+        <li><a href="#snacks-section">Chekarlu</a></li>
+        <li><a href="#snacks-section">Boondi Mixture</a></li>
+        <li><a href="#snacks-section">Sunnunda</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="veg-section">
+  <h2>Veg Pickles</h2>
+  <div class="items-container">
+    <div class="item-card">
+      <img src="/static/mango.jpg" alt="Mango Pickle"/>
+      <div class="item-info">
+        <h4>Mango Pickle</h4>
+        <p>₹150 / 500g</p>
+        <button class="add-to-cart" data-name="Mango Pickle" data-price="150">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/lemon.jpg" alt="Lemon Pickle"/>
+      <div class="item-info">
+        <h4>Lemon Pickle</h4>
+        <p>₹150 / 500g</p>
+        <button class="add-to-cart" data-name="Lemon Pickle" data-price="150">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/gongura.jpg" alt="Gongura Pickle"/>
+      <div class="item-info">
+        <h4>Gongura Pickle</h4>
+        <p>₹170 / 500g</p>
+        <button class="add-to-cart" data-name="Gongura Pickle" data-price="170">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/gooseberry.jpg" alt="Gooseberry Pickle"/>
+      <div class="item-info">
+        <h4>Gooseberry Pickle</h4>
+        <p>₹140 / 500g</p>
+        <button class="add-to-cart" data-name="Gooseberry Pickle" data-price="140">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/tomato.jpg" alt="Tomato Pickle"/>
+      <div class="item-info">
+        <h4>Tomato Pickle</h4>
+        <p>₹150 / 500g</p>
+        <button class="add-to-cart" data-name="Tomato Pickle" data-price="150">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="nonveg-section">
+  <h2>Non‑Veg Pickles</h2>
+  <div class="items-container">
+    <div class="item-card">
+      <img src="/static/chicken.jpg" alt="Chicken Pickle"/>
+      <div class="item-info">
+        <h4>Chicken Pickle</h4>
+        <p>₹280 / 500g</p>
+        <button class="add-to-cart" data-name="Chicken Pickle" data-price="280">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/mutton.jpg" alt="Mutton Pickle"/>
+      <div class="item-info">
+        <h4>Mutton Pickle</h4>
+        <p>₹300 / 500g</p>
+        <button class="add-to-cart" data-name="Mutton Pickle" data-price="300">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/prawns.jpg" alt="Prawns Pickle"/>
+      <div class="item-info">
+        <h4>Prawns Pickle</h4>
+        <p>₹320 / 500g</p>
+        <button class="add-to-cart" data-name="Prawns Pickle" data-price="320">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/fish.jpg" alt="Fish Pickle"/>
+      <div class="item-info">
+        <h4>Fish Pickle</h4>
+        <p>₹300 / 500g</p>
+        <button class="add-to-cart" data-name="Fish Pickle" data-price="300">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="snacks-section">
+  <h2>Snacks</h2>
+  <div class="items-container">
+    <div class="item-card">
+      <img src="/static/chekarlu.jpg" alt="Chekarlu"/>
+      <div class="item-info">
+        <h4>Chekarlu</h4>
+        <p>₹100 / 250g</p>
+        <button class="add-to-cart" data-name="Chekarlu" data-price="100">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/bundi mixture.jpg" alt="Boondi Mixture"/>
+      <div class="item-info">
+        <h4>Boondi Mixture</h4>
+        <p>₹140 / 250g</p>
+        <button class="add-to-cart" data-name="Boondi Mixture" data-price="140">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/sunnunda.jpg" alt="Sunnunda"/>
+      <div class="item-info">
+        <h4>Sunnunda</h4>
+        <p>₹110 / 250g</p>
+        <button class="add-to-cart" data-name="Sunnunda" data-price="110">Add to Cart</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <img src="/static/murukulu.jpg" alt="Murukulu"/>
+      <div class="item-info">
+        <h4>Murukulu</h4>
+        <p>₹120 / 250g</p>
+        <button class="add-to-cart" data-name="Murukulu" data-price="120">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll(".add-to-cart").forEach(button => {
+    button.addEventListener("click", () => {
+      const name = button.dataset.name;
+      const price = parseInt(button.dataset.price, 10);
+      if (!name || isNaN(price)) {
+        alert("Error: item info missing");
+        return;
+      }
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.some(item => item.name === name)) {
+        alert(`${name} is already in your cart.`);
+      } else {
+        cart.push({name, price});
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${name} added to your cart.`);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
