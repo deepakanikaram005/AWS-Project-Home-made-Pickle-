@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Amma Pickles</title>
+  <style>
+    /* Same styles as before */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fffaf0;
+      color: #333;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      flex-wrap: wrap;
+    }
+
+    .site-title h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffeb99;
+    }
+
+    .navbar {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar li a:hover {
+      text-decoration: underline;
+    }
+
+    .form-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+      padding: 30px;
+    }
+
+    .form-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #008000;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-box button {
+      width: 100%;
+      padding: 10px;
+      background-color: #008000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-box button:hover {
+      background-color: #008000;
+    }
+
+    .form-box p {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-title">
+      <h1>Amma Pickles and Snacks</h1>
+      <span>Taste the Best</span>
+    </div>
+    <ul class="navbar">
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('shop') }}">Shop</a></li>
+    </ul>
+  </header>
+
+  <section class="form-section">
+    <div class="form-box">
+      <h2>Login</h2>
+      <form method="POST" action="{{ url_for('login') }}" onsubmit="return validateLogin()">
+        <input type="text" name="username" id="username" placeholder="Email" required />
+        <input type="password" name="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <p class="error" id="errorMsg"></p>
+      </form>
+      <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+    </div>
+  </section>
+
+  <script>
+    function validateLogin() {
+      const email = document.getElementById("username").value;
+      const errorMsg = document.getElementById("errorMsg");
+      if (!email.includes("@")) {
+        errorMsg.textContent = "Please enter a valid email.";
+        return false;
+      }
+      return true;
+    }
+  </script>
+</body>
+</html>
+
