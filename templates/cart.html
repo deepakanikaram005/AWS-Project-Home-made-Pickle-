@@ -221,7 +221,6 @@
   </style>
 </head>
 <body>
-
 <header>
   <div class="brand">Amma Pickles and Snacks</div>
   <nav>
@@ -230,7 +229,6 @@
     <button class="nav-button" onclick="toggleOrders()">My Orders</button>
   </nav>
 </header>
-
 <div class="cart-container">
   <h1>Your Cart</h1>
   <div id="cart-items"></div>
@@ -239,17 +237,12 @@
     <button class="buy-btn" onclick="buyNow()">Buy Now</button>
   </div>
 </div>
-
-<!-- Orders Sidebar Popup -->
 <div class="orders-popup" id="ordersPopup">
   <button class="close-btn" onclick="toggleOrders()">X</button>
   <h2>My Orders</h2>
   <div id="orders-list"></div>
 </div>
-
-<!-- Success Popup -->
 <div id="popup" class="popup">Order cancelled successfully.</div>
-
 <script>
   let cartData = JSON.parse(localStorage.getItem('cart')) || [];
   const container = document.getElementById('cart-items');
