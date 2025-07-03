@@ -14,7 +14,7 @@
     }
 
     header {
-      background-color:#333;/* rgba(0, 0, 0, 0.6);*/
+      background-color: #333;
       color: white;
       display: flex;
       justify-content: space-between;
@@ -137,7 +137,6 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
-    /* Feedback Styling */
     .feedback-container {
       text-align: center;
       margin-top: 20px;
@@ -219,8 +218,6 @@
       <span>Taste the Best</span>
     </div>
     <ul class="navbar">
-      <!--<li><a href="#home">Home</a></li>
-      <li><a href="#shop">Shop</a></li>-->
       <li><a href="{{ url_for('home') }}">Home</a></li>
       <li><a href="{{ url_for('shop') }}">Shop</a></li>
       <li><a href="#about">About</a></li>
@@ -228,68 +225,49 @@
     </ul>
   </header>
 
-  <!-- Home Section -->
   <section id="home" class="section">
     <div class="content">
-      <!--<h1>Welcome ☺</h1>-->
-      <h1>Welcome <img src="https://em-content.zobj.net/source/microsoft-teams/337/smiling-face_263a-fe0f.png" alt="Smiling Face" style="width: 30px; vertical-align: middle;" /></h1>
-
-      <p>Enjoy homemade pickles crafted with tradition and love!</p>
+      <h1>Welcome 
+        <img src="https://em-content.zobj.net/source/microsoft-teams/337/smiling-face_263a-fe0f.png" alt="Smiling Face" style="width: 30px; vertical-align: middle;" />
+      </h1>
+      <p>Welcome to Amma Pickles and Snacks, where every bite brings you the authentic taste of home. Our pickles are handcrafted using age-old recipes passed down through generations.</p>
     </div>
   </section>
 
-  <!-- Shop Section -->
   <section id="shop" class="section">
     <div class="text-section">
-      <!--<h1>Shop Our Pickles</h1>-->
       <h1>Shop 
-  <img src="https://em-content.zobj.net/source/microsoft-teams/337/shopping-bags_1f6cd-fe0f.png" 
-       alt="Shop Icon" 
-       style="width: 30px; vertical-align: middle;" />
-</h1>
-      <p>Browse our delicious selection of traditional homemade pickles and snacks.</p>
+        <img src="https://em-content.zobj.net/source/microsoft-teams/337/shopping-bags_1f6cd-fe0f.png" alt="Shop Icon" style="width: 30px; vertical-align: middle;" />
+      </h1>
+      <p>Discover a wide variety of tangy, spicy, and flavorful pickles made from fresh, organic ingredients. From classic mango and lemon pickles to our unique chicken and gongura specials, we have something to suit every palate.</p>
     </div>
     <div class="circle-img">
       <img src="static/pic1.jpg" alt="Pickle Showcase" />
     </div>
   </section>
 
-  <!-- About Section -->
   <section id="about" class="section">
     <div class="circle-img">
-      <!--<img src="static/pic1.jpg" alt="About Image" />-->
       <img src="{{ url_for('static', filename='circle.jpg') }}" alt="Pickle" width="300" />
-
     </div>
     <div class="text-section">
-      <!--<h1>About Us</h1>-->
       <h1>About Us 
-  <img src="https://em-content.zobj.net/source/microsoft-teams/337/busts-in-silhouette_1f465.png" 
-       alt="About Us Icon" 
-       style="width: 30px; vertical-align: middle;" />
-</h1>
-
+        <img src="https://em-content.zobj.net/source/microsoft-teams/337/busts-in-silhouette_1f465.png" alt="About Us Icon" style="width: 30px; vertical-align: middle;" />
+      </h1>
       <p>We are a family-run business delivering authentic and organic pickles to your doorstep.</p>
     </div>
   </section>
 
-  <!-- Contact Section -->
   <section id="contact" class="section">
     <div class="text-section">
-      <!--<h1>Contact Us</h1>-->
       <h1>Contact Us 
-  <img src="https://em-content.zobj.net/source/microsoft-teams/337/telephone-receiver_1f4de.png" 
-       alt="Contact Icon" 
-       style="width: 30px; vertical-align: middle;" />
-</h1>
-
+        <img src="https://em-content.zobj.net/source/microsoft-teams/337/telephone-receiver_1f4de.png" alt="Contact Icon" style="width: 30px; vertical-align: middle;" />
+      </h1>
       <p>Email: contact@pickledelight.com<br />Phone: +91-1234567890</p>
     </div>
     <div class="circle-img">
       <div>
-        <!--<img src="static/pic1.jpg" alt="Contact Image" />-->
         <img src="{{ url_for('static', filename='pic.jpg') }}" alt="Pickle" width="300" />
-
         <div class="feedback-container">
           <button class="feedback-toggle" onclick="toggleFeedback()">Feedback</button>
           <div class="feedback-box" id="feedbackForm">
@@ -301,7 +279,6 @@
     </div>
   </section>
 
-  <!-- Feedback Toggle Script -->
   <script>
     function toggleFeedback() {
       const box = document.getElementById('feedbackForm');
