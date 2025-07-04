@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Signup</title>
   <style>
-    /* Same styles as before */
     body {
       font-family: Arial, sans-serif;
       background: #f2f2f2;
@@ -20,7 +19,6 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px 30px;
-      flex-wrap: wrap;
     }
 
     .site-title h1 {
@@ -62,7 +60,6 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 400px;
-      box-sizing: border-box;
       text-align: center;
     }
 
@@ -72,7 +69,6 @@
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      box-sizing: border-box;
     }
 
     .form-box button {
@@ -108,6 +104,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -120,13 +117,14 @@
       <li><a href="{{ url_for('shop') }}">Shop</a></li>
     </ul>
   </header>
-
   <section class="form-section">
     <div class="form-box">
       <h2>Signup</h2>
       <form method="POST" action="{{ url_for('signup') }}" onsubmit="return validateSignup()">
+        <input type="text" name="fullname" id="fullname" placeholder="Full Name" required />
         <input type="email" name="email" id="email" placeholder="Email" required />
         <input type="password" name="password" id="password" placeholder="Create Password" required />
+        <input type="password" name="confirm" id="confirm" placeholder="Confirm Password" required />
         <button type="submit">Sign Up</button>
         <p class="error" id="errorMsg"></p>
       </form>
@@ -138,6 +136,7 @@
     function validateSignup() {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
+      const confirm = document.getElementById("confirm").value.trim();
       const errorMsg = document.getElementById("errorMsg");
 
       if (!email.includes("@")) {
@@ -150,6 +149,11 @@
         return false;
       }
 
+      if (password !== confirm) {
+        errorMsg.textContent = "Passwords do not match.";
+        return false;
+      }
+
       errorMsg.textContent = "";
       return true;
     }
@@ -157,5 +161,3 @@
 
 </body>
 </html>
-
-
