@@ -16,6 +16,7 @@ use_dynamo = False
 sns = None
 users_table = None
 orders_table = None
+feedback_table = None
 local_users = {}
 local_orders = []
 
@@ -28,6 +29,7 @@ try:
     dynamodb.meta.client.list_tables()
     users_table = dynamodb.Table('Users')
     orders_table = dynamodb.Table('Orders')
+    feedback_table = dynamodb.Table('Feedback')  # ✅ Added feedback table
 
     use_dynamo = True
 except NoCredentialsError:
@@ -68,8 +70,15 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        fullname = request.form.get('fullname')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+
+        if password != confirm:
+            flash('Passwords do not match.', 'error')
+            return redirect(url_for('signup'))
+
         hashed_pw = generate_password_hash(password)
 
         if use_dynamo:
@@ -78,15 +87,25 @@ def signup():
                 flash('Email already registered', 'error')
                 return redirect(url_for('signup'))
 
-            users_table.put_item(Item={'email': email, 'password': hashed_pw})
+            users_table.put_item(Item={
+                'email': email,
+                'fullname': fullname,
+                'password': hashed_pw
+            })
         else:
             if email in local_users:
                 flash('Email already registered', 'error')
                 return redirect(url_for('signup'))
-            local_users[email] = {'email': email, 'password': hashed_pw}
+
+            local_users[email] = {
+                'email': email,
+                'fullname': fullname,
+                'password': hashed_pw
+            }
 
         flash('Signup successful. Please login.', 'success')
         return redirect(url_for('login'))
+
     return render_template('signup.html')
 
 @app.route('/logout')
@@ -153,71 +172,36 @@ def buynow():
 def success(order_id):
     return render_template('success.html', order_id=order_id)
 
-# -------------------- Password Reset --------------------
 
-@app.route('/forgot-password', methods=['GET', 'POST'])
-def forgot_password():
-    if request.method == 'POST':
-        email = request.form.get('resetEmail')
 
-        user = users_table.get_item(Key={'email': email}).get('Item') if use_dynamo else local_users.get(email)
+# -------------------- Feedback Handling --------------------
 
-        if not user:
-            flash("Email not found.", 'error')
-            return redirect(url_for('forgot_password'))
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    data = request.get_json()
+    feedback_text = data.get('feedback', '').strip()
 
-        code = str(uuid.uuid4())[:6].upper()
-        reset_codes[email] = code
+    if not feedback_text:
+        return {'error': 'Empty feedback'}, 400
 
-        message = f"Your Amma Pickles password reset code: {code}"
-        try:
-            if sns:
-                # Replace with your SNS topic or SMS endpoint
-                sns.publish(
-                    Message=message,
-                    Subject="Password Reset",
-                    TopicArn=os.getenv("SNS_RESET_TOPIC_ARN")  # or use PhoneNumber
-                )
-            flash('Reset code sent.', 'info')
-        except ClientError as e:
-            flash(f"Error sending SNS: {str(e)}", 'error')
+    feedback_id = str(uuid.uuid4())
 
-        return redirect(url_for('reset_password', email=email))
-    return render_template('forgot_password.html')
-
-@app.route('/reset-password/<email>', methods=['GET', 'POST'])
-def reset_password(email):
-    if request.method == 'POST':
-        code = request.form.get('code')
-        new_pw = request.form.get('new_password')
-        confirm_pw = request.form.get('confirm_password')
-
-        if reset_codes.get(email) != code:
-            flash("Invalid code.", 'error')
-            return redirect(url_for('reset_password', email=email))
-
-        if new_pw != confirm_pw:
-            flash("Passwords do not match.", 'error')
-            return redirect(url_for('reset_password', email=email))
-
-        hashed_pw = generate_password_hash(new_pw)
+    try:
         if use_dynamo:
-            users_table.update_item(
-                Key={'email': email},
-                UpdateExpression='SET password = :p',
-                ExpressionAttributeValues={':p': hashed_pw}
-            )
+            feedback_table.put_item(Item={
+                'feedback_id': feedback_id,
+                'feedback': feedback_text
+            })
         else:
-            local_users[email]['password'] = hashed_pw
-
-        reset_codes.pop(email, None)
-        flash("Password reset successful.", 'success')
-        return redirect(url_for('login'))
-
-    return render_template('reset_password.html', email=email)
+            print("Feedback received (local):", feedback_text)
+        return {'message': 'Feedback stored successfully'}, 200
+    except Exception as e:
+        print("Error saving feedback:", e)
+        return {'error': str(e)}, 500
 
 # -------------------- Run --------------------
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
