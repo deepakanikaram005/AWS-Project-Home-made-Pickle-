@@ -29,16 +29,13 @@ try:
     dynamodb.meta.client.list_tables()
     users_table = dynamodb.Table('Users')
     orders_table = dynamodb.Table('Orders')
-    feedback_table = dynamodb.Table('Feedback')  # ✅ Added feedback table
+    feedback_table = dynamodb.Table('Feedback')
 
     use_dynamo = True
 except NoCredentialsError:
     print("No AWS credentials found, falling back to local storage.")
 except ClientError as e:
     print(f"AWS Client error: {str(e)}")
-
-# Temporary in-memory store for reset codes
-reset_codes = {}
 
 # ------------------- Routes -------------------
 
@@ -158,7 +155,11 @@ def buynow():
             try:
                 orders_table.put_item(Item=order)
                 message = f"Hi {name}, your order {order_id} is confirmed. Total ₹{total}. Thank you!"
-                sns.publish(PhoneNumber='+91' + phone, Message=message)
+                sns.publish(
+                    TopicArn='arn:aws:sns:ap-south-1:123456789012:YourTopicName',
+                    Message=message,
+                    Subject='Order Confirmation'
+                )
             except ClientError as e:
                 print("SNS or DynamoDB error:", e)
         else:
@@ -171,8 +172,6 @@ def buynow():
 @app.route('/success/<order_id>')
 def success(order_id):
     return render_template('success.html', order_id=order_id)
-
-
 
 # -------------------- Feedback Handling --------------------
 
@@ -203,5 +202,6 @@ def submit_feedback():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
 
